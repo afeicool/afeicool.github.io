@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://afei.vip/</loc>
+    <lastmod>2019-09-01T19:10:58+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://afei.vip/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://afei.vip/series/</loc>
+  </url>
+  
+  <url>
+    <loc>https://afei.vip/tags/</loc>
+  </url>
+  
+</urlset>
