@@ -12,6 +12,33 @@
     
     
     <item>
+      <title>Contact</title>
+      <link>https://afei.vip/contact/</link>
+      <pubDate>Mon, 02 Sep 2019 16:09:43 +0800</pubDate>
+      
+      <guid>https://afei.vip/contact/</guid>
+      <description> 此人很懒，什么也没留下。 </description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>https://afei.vip/projects/</link>
+      <pubDate>Mon, 02 Sep 2019 16:08:04 +0800</pubDate>
+      
+      <guid>https://afei.vip/projects/</guid>
+      <description> 此人很懒，什么也没留下。 </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://afei.vip/about/</link>
+      <pubDate>Mon, 02 Sep 2019 16:04:45 +0800</pubDate>
+      
+      <guid>https://afei.vip/about/</guid>
+      <description> 此人很懒，什么也没留下。 </description>
+    </item>
+    
+    <item>
       <title>控制反转（Inversion of Control, IoC）浅析</title>
       <link>https://afei.vip/posts/ioc/</link>
       <pubDate>Sun, 01 Sep 2019 19:12:50 +0800</pubDate>
