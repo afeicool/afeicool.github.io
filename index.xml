@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on 阿飞呓语</title>
@@ -17,7 +17,7 @@
       <pubDate>Mon, 02 Sep 2019 16:09:43 +0800</pubDate>
       
       <guid>https://afei.vip/contact/</guid>
-      <description> 此人很懒，什么也没留下。 </description>
+      <description>此人很懒，什么也没留下。</description>
     </item>
     
     <item>
@@ -26,7 +26,7 @@
       <pubDate>Mon, 02 Sep 2019 16:08:04 +0800</pubDate>
       
       <guid>https://afei.vip/projects/</guid>
-      <description> 此人很懒，什么也没留下。 </description>
+      <description>此人很懒，什么也没留下。</description>
     </item>
     
     <item>
@@ -35,7 +35,7 @@
       <pubDate>Mon, 02 Sep 2019 16:04:45 +0800</pubDate>
       
       <guid>https://afei.vip/about/</guid>
-      <description> 此人很懒，什么也没留下。 </description>
+      <description>此人很懒，什么也没留下。</description>
     </item>
     
     <item>
@@ -44,7 +44,15 @@
       <pubDate>Sun, 01 Sep 2019 19:12:50 +0800</pubDate>
       
       <guid>https://afei.vip/posts/ioc/</guid>
-      <description>控制反转（Inversion of Control, IoC）的概念   IoC 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种 方式，最常见的就是 依赖注入 。 IoC 解决了什么问题   首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去： // 示例1  class Order { private final EventPublisher eventPublisher; public Order() { eventPublisher = new EventPublisher(); } public long save () { //...  eventPublisher.publishEvent(&amp;#34;save&amp;#34;); //...  } }   这里略无关业务逻辑的代码，聚焦在 Order 和 EventPublisher 关系上， Order 是依赖于 EventPublisher 的，于是 Order 在构造时，自己把 EventPublisher 创建出来了。  问题是 Order 需要知道 EventPublisher 如何创建的，这好比某人想吃猪肉，于是 他自己养了猪，自己磨了把杀猪刀是一个道理。看到 new Object , 基本也就断定了， 产生了紧耦合。换句话说 Order 需要知道它本并不需要知道的事，它知道太多了。  这里违返了两个设计原则，第一是 开闭原则 ，第二是 针对接口编程 。我们需要把 可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的， 比如同步实现、异步实现、通过消息中间件的实现，等等， Order 本身不关心这是什 么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。  因为绑定了具体实现，同样导致测试不好测，这里没办法在测试里Mock一个 EventPublisher 。代码难以测试，也表明代码设计是有问题的。 依赖注入 (DI)   依赖注入是 IoC 实现的方式之一，另外的实现还有服务查找(Service Locator)等， 这里只说依赖注入。  重构一下上面的例子： 构造函数注入  // 示例2: 构造函数注入  class Order { private final IEventPublisher eventPublisher; public Order(IEventPublisher eventpublisher) { this.</description>
+      <description>控制反转（Inversion of Control, IoC）的概念 IoC 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种方式，最常见的就是 依赖注入 。
+IoC解决了什么问题 首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去：
+// 示例1 class Order { private final EventPublisher eventPublisher; public Order() { eventPublisher = new EventPublisher(); } public long save () { //...  eventPublisher.publishEvent(&amp;#34;save&amp;#34;); //...  } } 这里忽略无关业务逻辑的代码，聚焦在Order 和 EventPublisher 关系上， Order是依赖于EventPublisher的，于是Order在构造时，自己把EventPublisher创建出来了。
+问题是 Order 需要知道 EventPublisher 如何创建的，这好比某人想吃猪肉，于是他自己养了猪，自己磨了把杀猪刀是一个道理。看到 new Object, 基本也就断定了，产生了紧耦合。换句话说 Order 需要知道它本并不需要知道的事，它知道太多了。
+这里违反了两个设计原则，第一是开闭原则 ，第二是针对接口编程 。我们需要把可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的，比如同步实现、异步实现、通过消息中间件的实现，等等， Order 本身不关心这是什么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。
+因为绑定了具体实现，导致测试相当困难，这里没办法在测试里Mock一个EventPublisher 。难以测试的代码，暗示着代码设计是有问题的。
+依赖注入 (DI) 依赖注入是IoC 实现的方式之一，其他实现方式还有服务查找(Service Locator)等，这里只说依赖注入。
+重构一下上面的例子：
+构造函数注入 // 示例2: 构造函数注入 class Order { private final EventPublisher eventPublisher; public Order(EventPublisher eventpublisher) { this.</description>
     </item>
     
   </channel>

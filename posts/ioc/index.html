@@ -7,14 +7,30 @@
 
     <meta name="author" content="阿飞">
     <meta name="description" content="阿飞的个人主页">
-    <meta name="keywords" content="blog,developer,personal">
+    <meta name="keywords" content="阿飞，阿飞呓语，阿飞博客">
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="控制反转（Inversion of Control, IoC）浅析"/>
-<meta name="twitter:description" content="控制反转（Inversion of Control, IoC）的概念   IoC 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种 方式，最常见的就是 依赖注入 。 IoC 解决了什么问题   首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去： // 示例1  class Order { private final EventPublisher eventPublisher; public Order() { eventPublisher = new EventPublisher(); } public long save () { //...  eventPublisher.publishEvent(&#34;save&#34;); //...  } }   这里略无关业务逻辑的代码，聚焦在 Order 和 EventPublisher 关系上， Order 是依赖于 EventPublisher 的，于是 Order 在构造时，自己把 EventPublisher 创建出来了。  问题是 Order 需要知道 EventPublisher 如何创建的，这好比某人想吃猪肉，于是 他自己养了猪，自己磨了把杀猪刀是一个道理。看到 new Object , 基本也就断定了， 产生了紧耦合。换句话说 Order 需要知道它本并不需要知道的事，它知道太多了。  这里违返了两个设计原则，第一是 开闭原则 ，第二是 针对接口编程 。我们需要把 可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的， 比如同步实现、异步实现、通过消息中间件的实现，等等， Order 本身不关心这是什 么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。  因为绑定了具体实现，同样导致测试不好测，这里没办法在测试里Mock一个 EventPublisher 。代码难以测试，也表明代码设计是有问题的。 依赖注入 (DI)   依赖注入是 IoC 实现的方式之一，另外的实现还有服务查找(Service Locator)等， 这里只说依赖注入。  重构一下上面的例子： 构造函数注入  // 示例2: 构造函数注入  class Order { private final IEventPublisher eventPublisher; public Order(IEventPublisher eventpublisher) { this."/>
+<meta name="twitter:description" content="控制反转（Inversion of Control, IoC）的概念 IoC 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种方式，最常见的就是 依赖注入 。
+IoC解决了什么问题 首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去：
+// 示例1 class Order { private final EventPublisher eventPublisher; public Order() { eventPublisher = new EventPublisher(); } public long save () { //...  eventPublisher.publishEvent(&#34;save&#34;); //...  } } 这里忽略无关业务逻辑的代码，聚焦在Order 和 EventPublisher 关系上， Order是依赖于EventPublisher的，于是Order在构造时，自己把EventPublisher创建出来了。
+问题是 Order 需要知道 EventPublisher 如何创建的，这好比某人想吃猪肉，于是他自己养了猪，自己磨了把杀猪刀是一个道理。看到 new Object, 基本也就断定了，产生了紧耦合。换句话说 Order 需要知道它本并不需要知道的事，它知道太多了。
+这里违反了两个设计原则，第一是开闭原则 ，第二是针对接口编程 。我们需要把可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的，比如同步实现、异步实现、通过消息中间件的实现，等等， Order 本身不关心这是什么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。
+因为绑定了具体实现，导致测试相当困难，这里没办法在测试里Mock一个EventPublisher 。难以测试的代码，暗示着代码设计是有问题的。
+依赖注入 (DI) 依赖注入是IoC 实现的方式之一，其他实现方式还有服务查找(Service Locator)等，这里只说依赖注入。
+重构一下上面的例子：
+构造函数注入 // 示例2: 构造函数注入 class Order { private final EventPublisher eventPublisher; public Order(EventPublisher eventpublisher) { this."/>
 
     <meta property="og:title" content="控制反转（Inversion of Control, IoC）浅析" />
-<meta property="og:description" content="控制反转（Inversion of Control, IoC）的概念   IoC 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种 方式，最常见的就是 依赖注入 。 IoC 解决了什么问题   首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去： // 示例1  class Order { private final EventPublisher eventPublisher; public Order() { eventPublisher = new EventPublisher(); } public long save () { //...  eventPublisher.publishEvent(&#34;save&#34;); //...  } }   这里略无关业务逻辑的代码，聚焦在 Order 和 EventPublisher 关系上， Order 是依赖于 EventPublisher 的，于是 Order 在构造时，自己把 EventPublisher 创建出来了。  问题是 Order 需要知道 EventPublisher 如何创建的，这好比某人想吃猪肉，于是 他自己养了猪，自己磨了把杀猪刀是一个道理。看到 new Object , 基本也就断定了， 产生了紧耦合。换句话说 Order 需要知道它本并不需要知道的事，它知道太多了。  这里违返了两个设计原则，第一是 开闭原则 ，第二是 针对接口编程 。我们需要把 可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的， 比如同步实现、异步实现、通过消息中间件的实现，等等， Order 本身不关心这是什 么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。  因为绑定了具体实现，同样导致测试不好测，这里没办法在测试里Mock一个 EventPublisher 。代码难以测试，也表明代码设计是有问题的。 依赖注入 (DI)   依赖注入是 IoC 实现的方式之一，另外的实现还有服务查找(Service Locator)等， 这里只说依赖注入。  重构一下上面的例子： 构造函数注入  // 示例2: 构造函数注入  class Order { private final IEventPublisher eventPublisher; public Order(IEventPublisher eventpublisher) { this." />
+<meta property="og:description" content="控制反转（Inversion of Control, IoC）的概念 IoC 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种方式，最常见的就是 依赖注入 。
+IoC解决了什么问题 首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去：
+// 示例1 class Order { private final EventPublisher eventPublisher; public Order() { eventPublisher = new EventPublisher(); } public long save () { //...  eventPublisher.publishEvent(&#34;save&#34;); //...  } } 这里忽略无关业务逻辑的代码，聚焦在Order 和 EventPublisher 关系上， Order是依赖于EventPublisher的，于是Order在构造时，自己把EventPublisher创建出来了。
+问题是 Order 需要知道 EventPublisher 如何创建的，这好比某人想吃猪肉，于是他自己养了猪，自己磨了把杀猪刀是一个道理。看到 new Object, 基本也就断定了，产生了紧耦合。换句话说 Order 需要知道它本并不需要知道的事，它知道太多了。
+这里违反了两个设计原则，第一是开闭原则 ，第二是针对接口编程 。我们需要把可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的，比如同步实现、异步实现、通过消息中间件的实现，等等， Order 本身不关心这是什么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。
+因为绑定了具体实现，导致测试相当困难，这里没办法在测试里Mock一个EventPublisher 。难以测试的代码，暗示着代码设计是有问题的。
+依赖注入 (DI) 依赖注入是IoC 实现的方式之一，其他实现方式还有服务查找(Service Locator)等，这里只说依赖注入。
+重构一下上面的例子：
+构造函数注入 // 示例2: 构造函数注入 class Order { private final EventPublisher eventPublisher; public Order(EventPublisher eventpublisher) { this." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://afei.vip/posts/ioc/" />
 <meta property="article:published_time" content="2019-09-01T19:12:50+08:00" />
@@ -32,14 +48,14 @@
       <link rel="canonical" href="https://afei.vip/posts/ioc/">
     
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
 
     
       
       
-      <link rel="stylesheet" href="https://afei.vip/css/coder.min.28d751104f30c16da1aa1bb04015cbe662cacfe0d1b01af4f2240ad58580069c.css" integrity="sha256-KNdREE8wwW2hqhuwQBXL5mLKz&#43;DRsBr08iQK1YWABpw=" crossorigin="anonymous" media="screen" />
+      <link rel="stylesheet" href="https://afei.vip/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css" integrity="sha256-pPMyITohzo61IWcMYURwxYkjqq84XipzmCwx3XZC3ss=" crossorigin="anonymous" media="screen" />
     
 
     
@@ -49,20 +65,25 @@
     
 
     
+
     
+
     <link rel="icon" type="image/png" href="https://afei.vip/images/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="https://afei.vip/images/favicon-16x16.png" sizes="16x16">
 
-    <meta name="generator" content="Hugo 0.58.0-DEV" />
+    <meta name="generator" content="Hugo 0.69.0" />
   </head>
 
-  <body class=" ">
+  
+  
+  <body class="colorscheme-light">
     <main class="wrapper">
       <nav class="navigation">
   <section class="container">
     <a class="navigation-title" href="https://afei.vip/">
       阿飞呓语
     </a>
+    
     <input type="checkbox" id="menu-toggle" />
     <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
     <ul class="navigation-list">
@@ -87,6 +108,7 @@
       
       
     </ul>
+    
   </section>
 </nav>
 
@@ -109,7 +131,7 @@
             </span>
             <span class="reading-time">
               <i class="fas fa-clock"></i>
-              2 minutes read
+              1-minute read
             </span>
           </div>
           
@@ -128,190 +150,114 @@
 
       <div>
         
-<h1 id="headline-1">
-控制反转（Inversion of Control, IoC）的概念
-</h1>
-<p>
-<strong>IoC</strong> 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种
-方式，最常见的就是 <strong>依赖注入</strong> 。
-</p>
-<h1 id="headline-2">
-<strong>IoC</strong> 解决了什么问题
-</h1>
-<p>
-首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去：
-</p>
-<div class="src src-java">
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#6272a4">// 示例1
+        <h1 id="控制反转inversion-of-control-ioc的概念">控制反转（Inversion of Control, IoC）的概念</h1>
+<p><em>IoC</em> 是一种程序设计的理念，它主要解决的是程序耦合的问题。实现这个理念有多种方式，最常见的就是 <em>依赖注入</em> 。</p>
+<h1 id="ioc解决了什么问题">IoC解决了什么问题</h1>
+<p>首先让我们看一个最常见的例子： 在订单生成时，抛一个事件出去：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#6272a4">// 示例1
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> EventPublisher eventPublisher<span style="color:#ff79c6">;</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Order</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        eventPublisher <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> EventPublisher<span style="color:#ff79c6">();</span>
+    <span style="color:#ff79c6">}</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">save</span> <span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#6272a4">//...
 </span><span style="color:#6272a4"></span>
-  <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> {
-      <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">final</span> EventPublisher <span style="color:#50fa7b">eventPublisher</span>;
+        eventPublisher<span style="color:#ff79c6">.</span><span style="color:#50fa7b">publishEvent</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;save&#34;</span><span style="color:#ff79c6">);</span>
 
-      <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Order</span>() {
-          eventPublisher <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> EventPublisher();
-      }
+        <span style="color:#6272a4">//...
+</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><p>这里忽略无关业务逻辑的代码，聚焦在<code>Order</code> 和 <code>EventPublisher</code> 关系上， <code>Order</code>是依赖于<code>EventPublisher</code>的，于是<code>Order</code>在构造时，自己把<code>EventPublisher</code>创建出来了。</p>
+<p>问题是 <code>Order</code> 需要知道 <code>EventPublisher</code> 如何创建的，这好比某人想吃猪肉，于是他自己养了猪，自己磨了把杀猪刀是一个道理。看到 <code>new Object</code>, 基本也就断定了，产生了紧耦合。换句话说 <code>Order</code> 需要知道它本并不需要知道的事，它知道太多了。</p>
+<p>这里违反了两个设计原则，第一是<em>开闭原则</em> ，第二是<em>针对接口编程</em> 。我们需要把可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的，比如同步实现、异步实现、通过消息中间件的实现，等等， <code>Order</code> 本身不关心这是什么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。</p>
+<p>因为绑定了具体实现，导致测试相当困难，这里没办法在测试里Mock一个<code>EventPublisher</code> 。难以测试的代码，暗示着代码设计是有问题的。</p>
+<h1 id="依赖注入-di">依赖注入 (DI)</h1>
+<p>依赖注入是<em>IoC</em> 实现的方式之一，其他实现方式还有服务查找(Service Locator)等，这里只说依赖注入。</p>
+<p>重构一下上面的例子：</p>
+<h2 id="构造函数注入">构造函数注入</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#6272a4">// 示例2: 构造函数注入
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> EventPublisher eventPublisher<span style="color:#ff79c6">;</span>
 
-      <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">long</span> save () {
-          <span style="color:#6272a4">//...
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Order</span><span style="color:#ff79c6">(</span>EventPublisher eventpublisher<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">eventPublisher</span> <span style="color:#ff79c6">=</span> eventpublisher<span style="color:#ff79c6">;</span>
+    <span style="color:#ff79c6">}</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">save</span> <span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#6272a4">//...
 </span><span style="color:#6272a4"></span>
-          eventPublisher.<span style="color:#50fa7b">publishEvent</span>(<span style="color:#f1fa8c">&#34;save&#34;</span>);
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">eventPublisher</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">publishEvent</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;save&#34;</span><span style="color:#ff79c6">);</span>
 
-          <span style="color:#6272a4">//...
-</span><span style="color:#6272a4"></span>      }
-  }</code></pre></div>
-</div>
-<p>
-这里略无关业务逻辑的代码，聚焦在 <code>Order</code> 和 <code>EventPublisher</code> 关系上， <code>Order</code>
-是依赖于 <code>EventPublisher</code> 的，于是 <code>Order</code> 在构造时，自己把 <code>EventPublisher</code>
-创建出来了。
-</p>
-<p>
-问题是 <code>Order</code> 需要知道 <code>EventPublisher</code> 如何创建的，这好比某人想吃猪肉，于是
-他自己养了猪，自己磨了把杀猪刀是一个道理。看到 <code>new Object</code> , 基本也就断定了，
-产生了紧耦合。换句话说 <code>Order</code> 需要知道它本并不需要知道的事，它知道太多了。
-</p>
-<p>
-这里违返了两个设计原则，第一是 <em>开闭原则</em> ，第二是 <em>针对接口编程</em> 。我们需要把
-可能的变化屏蔽或封装起来，这里的变化是EventPublisher本身的实现是可能有多种的，
-比如同步实现、异步实现、通过消息中间件的实现，等等， <code>Order</code> 本身不关心这是什
-么实现，只需要知道需要触发时，调用接口就好了，剩下的事，由具体实现去关心。
-</p>
-<p>
-因为绑定了具体实现，同样导致测试不好测，这里没办法在测试里Mock一个
-<code>EventPublisher</code> 。代码难以测试，也表明代码设计是有问题的。
-</p>
-<h1 id="headline-3">
-依赖注入 (DI)
-</h1>
-<p>
-依赖注入是 <strong>IoC</strong> 实现的方式之一，另外的实现还有服务查找(Service Locator)等，
-这里只说依赖注入。
-</p>
-<p>
-重构一下上面的例子：
-</p>
-<h2 id="headline-4">
-构造函数注入
-</h2>
-<div class="src src-java">
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#6272a4">// 示例2: 构造函数注入
+        <span style="color:#6272a4">//...
+</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><p><code>Order</code> 现在不管<code>EventPublisher</code> 如何实例化，反过来由<em>外部</em>供给, 或者称之为<em>注入</em> 。并且这里传入的只要是<code>EventPublisher</code>这个接口的任意实现。所谓的<em>控制反转</em> ，就是指依赖的提供方由内而外，不自己提供，反过来由<em>外部</em>提供。这里的<em>外部</em>一般称为<em>容器 (Container)</em> 或<em>提供方(Provider)</em> 。很多语言框架都提供了自己的容器实现，比如php的框架Laravel 、Java框架Spring(Spring 容器的实现，会在Spring 系列文章来详述。)</p>
+<p>上述例子(示例2)中，依赖是通过构造器来注入的，所以称之为 <em>构造器注入</em> 。</p>
+<h2 id="属性注入">属性注入</h2>
+<p>同样的，还可以通过属性的设置来实现注入：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#6272a4">// 示例3: 属性注入
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> EventPublisher eventPublisher<span style="color:#ff79c6">;</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">setEventPublisher</span><span style="color:#ff79c6">(</span>EventPublisher eventPublisher<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">eventPublisher</span> <span style="color:#ff79c6">=</span> eventPublisher
+            <span style="color:#ff79c6">}</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">save</span> <span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#6272a4">//...
 </span><span style="color:#6272a4"></span>
-  <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> {
-      <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">final</span> IEventPublisher <span style="color:#50fa7b">eventPublisher</span>;
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">eventPublisher</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">publishEvent</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;save&#34;</span><span style="color:#ff79c6">);</span>
 
-      <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">Order</span>(IEventPublisher <span style="color:#50fa7b">eventpublisher</span>) {
-          <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">eventPublisher</span> <span style="color:#ff79c6">=</span> eventpublisher;
-      }
-
-      <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">long</span> save () {
-          <span style="color:#6272a4">//...
+        <span style="color:#6272a4">//...
+</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><p>上述例子(示例3)中，依赖是通过属性设置来注入的，所以称之为 <em>属性注入</em>或 <em>Setter注入</em> 。</p>
+<h2 id="工厂方法注入">工厂方法注入</h2>
+<p>在Java中，对象实例化的方式除了使用<code>new</code>以外，用得比较多的算是<em>工厂方法</em>，所以还可以通过工厂方法来实现注入：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#6272a4">// 示例4: 工厂方法注入
 </span><span style="color:#6272a4"></span>
-          <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">eventPublisher</span>.<span style="color:#50fa7b">publishEvent</span>(<span style="color:#f1fa8c">&#34;save&#34;</span>);
+<span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> EventPublisher eventPublisher<span style="color:#ff79c6">;</span>
 
-          <span style="color:#6272a4">//...
-</span><span style="color:#6272a4"></span>      }
-  }</code></pre></div>
-</div>
-<p>
-<code>Order</code> 现在不管 <code>EventPublisher</code> 如何实例化，反过来由 <em>外部</em> 供给, 或者称之
-为 <strong>注入</strong> 。并且这里传入的只要是 <code>IEventPublisher</code> 这个接口的任意实现。所谓
-的 <strong>控制反转</strong> ， 就是指依赖的提供方由内而外，不自己提供，反过来由 <em>外部</em> 提
-供。这里的 <em>外部</em> 一般称为 <strong>容器 (Container)</strong> 或 <strong>提供方(Provider)</strong> 。很多语
-言框架都提供了自己的容器实现，比如php的框架 <strong>Laravel</strong> 、Java 框架 <strong>Spring</strong>
-(Spring 容器的实现，会在Spring 系列文章来详述。)
-</p>
-<p>
-上述例子(示例2)中，依赖是通过构造器来注入的，所以称之为 <strong>构造器注入</strong> 。
-</p>
-<h2 id="headline-5">
-属性注入
-</h2>
-<p>
-同样的，还有通过属性的设置来注入：
-</p>
-<div class="src src-java">
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">   <span style="color:#6272a4">// 示例3: 属性注入
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">setEventPublisher</span><span style="color:#ff79c6">(</span>EventPublisher eventPublisher<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">eventPublisher</span> <span style="color:#ff79c6">=</span> eventPublisher
+    <span style="color:#ff79c6">}</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> Order <span style="color:#50fa7b">OrderFactoryMethod</span><span style="color:#ff79c6">(</span>EventPublisher eventPublisher<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        Order order <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Order<span style="color:#ff79c6">();</span>
+        order<span style="color:#ff79c6">.</span><span style="color:#50fa7b">setEventPublisher</span><span style="color:#ff79c6">(</span>eventPublisher<span style="color:#ff79c6">);</span>
+        <span style="color:#ff79c6">return</span> order<span style="color:#ff79c6">;</span>
+    <span style="color:#ff79c6">}</span>
+
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">long</span> <span style="color:#50fa7b">save</span> <span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#6272a4">//...
 </span><span style="color:#6272a4"></span>
-   <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> {
-       <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">final</span> IEventPublisher <span style="color:#50fa7b">eventPublisher</span>;
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">eventPublisher</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">publishEvent</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;save&#34;</span><span style="color:#ff79c6">);</span>
 
-       <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">setEventPublisher</span>(IEventPublisher <span style="color:#50fa7b">eventPublisher</span>) {
-           <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">eventPublisher</span> <span style="color:#ff79c6">=</span> eventPublisher
-       }
-
-       <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">long</span> save () {
-           <span style="color:#6272a4">//...
-</span><span style="color:#6272a4"></span>
-           <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">eventPublisher</span>.<span style="color:#50fa7b">publishEvent</span>(<span style="color:#f1fa8c">&#34;save&#34;</span>);
-
-           <span style="color:#6272a4">//...
-</span><span style="color:#6272a4"></span>       }
-   }</code></pre></div>
-</div>
-<p>
-上述例子(示例3)中，依赖是通过属性设置来注入的，所以称之为 <strong>属性注入</strong>
-或 <strong>Setter注入</strong> 。
-</p>
-<h2 id="headline-6">
-工厂方法注入
-</h2>
-<p>
-在Java中，对象实例化的方式除了使用 <code>new</code> 以外，用得比较多的算是 <strong>工厂方法</strong>
-，所以还可以通过工厂方法来实现注入：
-</p>
-<div class="src src-java">
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">   <span style="color:#6272a4">// 示例4: 工厂方法注入
-</span><span style="color:#6272a4"></span>
-   <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Order</span> {
-       <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">final</span> IEventPublisher <span style="color:#50fa7b">eventPublisher</span>;
-
-       <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#50fa7b">setEventPublisher</span>(IEventPublisher <span style="color:#50fa7b">eventPublisher</span>) {
-           <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">eventPublisher</span> <span style="color:#ff79c6">=</span> eventPublisher
-       }
-
-       <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">static</span> Order <span style="color:#50fa7b">OrderFactoryMethod</span>(IEventPublisher <span style="color:#50fa7b">eventPublisher</span>) {
-           Order <span style="color:#50fa7b">order</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Order();
-           order.<span style="color:#50fa7b">setEventPublisher</span>(eventPublisher);
-           <span style="color:#ff79c6">return</span> order;
-       }
-
-       <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">long</span> save () {
-           <span style="color:#6272a4">//...
-</span><span style="color:#6272a4"></span>
-           <span style="color:#ff79c6">this</span>.<span style="color:#50fa7b">eventPublisher</span>.<span style="color:#50fa7b">publishEvent</span>(<span style="color:#f1fa8c">&#34;save&#34;</span>);
-
-           <span style="color:#6272a4">//...
-</span><span style="color:#6272a4"></span>       }
-   }</code></pre></div>
-</div>
-<p>
-上述例子(示例4)中，依赖是通过静态工厂方法来注入的，所以称之为 <strong>工厂方法注入</strong>
-或 <strong>Factory Method 注入</strong> 。
-</p>
-<h2 id="headline-7">
-比较
-</h2>
-<p>
-<strong>构造器注入</strong> 一般都是强约束的，所以一般强依赖时，使用构造器注入。此外，像
-Spring框架中，构造器注入是可以避免循环依赖，这一般是一个比较好的编程实践，而
-<strong>属性注入</strong> 是允许循环依赖的。
-</p>
-<p>
-<strong>属性注入</strong> 一般都是可选的，所以一般可选依赖时，使用属性注入。
-</p>
-<p>
-<strong>工厂方法注入</strong> 在需要使用工厂模式时，工厂方法注入一般都是比较合适的。
-</p>
-<h1 id="headline-8">
-总结
-</h1>
-<p>
-总体来说 <strong>控制反转</strong> 及其实现之一 <strong>依赖注入</strong> 名字乍看比较费解，但了解了其背后解
-决的问题，和简单的实现之后，还是很好理解的。非常简单的概念,但是极其强大，现代
-框架里，很多都是基于这一简单的概念为核心，构建和组织复杂的面向对象框架的。
-</p>
+        <span style="color:#6272a4">//...
+</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><p>上述例子(示例4)中，依赖是通过静态工厂方法来注入的，所以称之为<em>工厂方法注入</em>或<em>Factory Method 注入</em> 。</p>
+<h2 id="比较">比较</h2>
+<ul>
+<li>
+<p><em>构造器注入</em> 一般都是强约束的，所以强依赖时，使用构造器注入。此外，像Spring框架中，构造器注入是可以避免循环依赖，这是一个比较好的编程实践，而<em>属性注入</em> 是允许循环依赖的。</p>
+</li>
+<li>
+<p><em>属性注入</em> 一般都是可选的，所以可选依赖时，使用属性注入。</p>
+</li>
+<li>
+<p><em>工厂方法注入</em> 在需要使用工厂模式时，工厂方法注入一般都是比较合适的。</p>
+</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>总体来说 <em>控制反转</em> 及其实现之一 <em>依赖注入</em> 名字乍看比较费解，但了解了其背后解决的问题，和简单的实现之后，还是很好理解的。非常简单的概念,但是极其强大，现代框架里，很多都是基于这一简单的概念为核心，构建和组织复杂的面向对象框架的。</p>
 
       </div>
+
 
       <footer>
         
@@ -347,21 +293,23 @@ Spring框架中，构造器注入是可以避免循环依赖，这一般是一�
 
       </div>
 
-      <footer class="footer">
-  <section class="container">
-    
-      <p>阿飞呓语</p>
-    
-    
-    
-    
       
-      [<a href="https://github.com/luizdepra/hugo-coder/tree/"></a>]
-    
-  </section>
-</footer>
+  <footer class="footer">
+    <section class="container">
+      
+        <p>阿飞呓语</p>
+      
+      
+      
+      
+        
+      
+    </section>
+  </footer>
 
     </main>
+
+    
 
     
 
